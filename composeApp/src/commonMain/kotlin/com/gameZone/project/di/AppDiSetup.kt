@@ -3,6 +3,7 @@ package com.gameZone.project.di
 import com.gameZone.characters.di.charactersModule
 import com.gameZone.di.domainModule
 import com.gameZone.di.networkModule
+import di.characterDetailsModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 
@@ -11,7 +12,8 @@ fun initKoin(koinApplication: ((KoinApplication) -> Unit)? = null) {
         modules(
             networkModule,
             domainModule,
-            charactersModule
+            charactersModule,
+            characterDetailsModule
         )
     }
 }
