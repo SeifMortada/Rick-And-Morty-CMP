@@ -61,18 +61,30 @@ private fun EpisodeDetailsScreen(state: EpisodeDetailsState) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)
                 ) {
                     items(characters) { character ->
-                        AsyncImage(
-                            model = character.imageUrl,
-                            contentDescription = character.name,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .clip(CircleShape),
-                            contentScale = ContentScale.Crop
-                        )
+                        Column(
+                            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                        ) {
+                            AsyncImage(
+                                model = character.imageUrl,
+                                contentDescription = character.name,
+                                modifier = Modifier
+                                    .size(96.dp)
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                            Text(
+                                text = character.name,
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(top = 8.dp),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }

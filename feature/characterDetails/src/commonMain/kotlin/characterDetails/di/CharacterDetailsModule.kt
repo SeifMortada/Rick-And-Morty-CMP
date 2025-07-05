@@ -1,4 +1,4 @@
-package di
+package characterDetails.di
 
 import characterDetails.CharacterDetailsViewModel
 import org.koin.core.module.dsl.viewModel

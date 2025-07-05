@@ -1,12 +1,16 @@
 package com.gameZone.project
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.gameZone.project.navigation.CharactersNavGraph
+import androidx.navigation.toRoute
+import characterDetails.CharacterDetailsRoute
+import com.gameZone.characters.ui.CharactersRoute
+import com.gameZone.episodeDetails.ui.EpisodeDetailsScreen
+import com.gameZone.project.navigation.AppNavHost
+import com.gameZone.project.navigation.Dest
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -14,16 +18,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     MaterialTheme {
-        val navHostController = rememberNavController()
-        NavHost(navHostController, startDestination = CharactersNavGraph.Dest.Route.route) {
-            listOf(CharactersNavGraph)
-                .forEach {
-                    it.build(
-                        modifier = Modifier.fillMaxSize(),
-                        navHostController = navHostController,
-                        navGraphBuilder = this
-                    )
-                }
-        }
+        AppNavHost()
     }
 }

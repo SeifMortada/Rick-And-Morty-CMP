@@ -3,6 +3,7 @@ package characterDetails
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,12 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import coil3.compose.AsyncImage
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -128,13 +131,18 @@ fun CharacterDetailsCard(
                 text = character.name,
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Cyan
+                color = MaterialTheme.colorScheme.primary,
             )
         }
         item { Spacer(Modifier.height(12.dp)) }
         item { CharacterImage(character.imageUrl) }
         item { Spacer(Modifier.height(12.dp)) }
-        item { CharacterEpisodes(characterEpisodes, onEpisodeClicked) }
+        item {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                SmallMagentaText("Episodes: ")
+                CharacterEpisodes(characterEpisodes, onEpisodeClicked)
+            }
+        }
         item { Spacer(Modifier.height(12.dp)) }
         items(characterDataPoints) {
             SmallMagentaText(it.title)
@@ -155,18 +163,25 @@ fun CharacterEpisodes(episodes: List<Episode>, onEpisodeClicked: (Int) -> Unit) 
         items(episodes) {
             Spacer(Modifier.width(8.dp))
             Card(
-                shape = RoundedCornerShape(12.dp), modifier = Modifier.size(150.dp),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.wrapContentSize(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                 onClick = { onEpisodeClicked(it.id) }) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = it.episode, fontSize = 20.sp, color = Color.Cyan)
+                    Text(
+                        text = it.episode,
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = it.name,
                         fontSize = 16.sp,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -177,12 +192,20 @@ fun CharacterEpisodes(episodes: List<Episode>, onEpisodeClicked: (Int) -> Unit) 
 
 @Composable
 fun SmallMagentaText(text: String) {
-    Text(text = text, style = MaterialTheme.typography.headlineSmall, color = Color.White)
+    Text(
+        text = text,
+        style = MaterialTheme.typography.headlineSmall,
+        color = MaterialTheme.colorScheme.primary
+    )
 }
 
 @Composable
 fun MediumWhiteText(text: String) {
-    Text(text = text, style = MaterialTheme.typography.bodyLarge, color = Color.LightGray)
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onBackground
+    )
 }
 
 @Composable
@@ -237,5 +260,5 @@ private fun CharacterScreenPreview() {
         state = CharacterResultUiState.Success(
             characters = character
         )
-    ){}
+    ) {}
 }

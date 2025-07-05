@@ -4,7 +4,7 @@ import com.gameZone.characters.di.charactersModule
 import com.gameZone.di.domainModule
 import com.gameZone.di.networkModule
 import com.gameZone.episodeDetails.di.episodeDetailsModule
-import di.characterDetailsModule
+import characterDetails.di.characterDetailsModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 
