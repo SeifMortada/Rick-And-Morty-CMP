@@ -47,20 +47,22 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CharacterDetailsRoute(
     viewModel: CharacterDetailsViewModel = koinViewModel(),
-    characterId: Int
+    characterId: Int,
+    onEpisodeClicked: (Int) -> Unit
 ) {
     val uiState by viewModel.characterUiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(characterId) {
         viewModel.getCharacter(characterId)
     }
-    CharacterDetailsScreen(uiState)
+    CharacterDetailsScreen(uiState, onEpisodeClicked)
 
 }
 
 @Composable
 fun CharacterDetailsScreen(
-    state: CharacterResultUiState
+    state: CharacterResultUiState,
+    onEpisodeClicked: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -75,6 +77,7 @@ fun CharacterDetailsScreen(
                     Text(state.message)
                 }
             }
+
             CharacterResultUiState.Idle -> Unit
             CharacterResultUiState.Loading -> CircularProgressIndicator()
             is CharacterResultUiState.Success -> {
@@ -95,7 +98,12 @@ fun CharacterDetailsScreen(
                         }
                     }
                 }
-                CharacterDetailsCard(character!!, characterDataPoints, state.episodes)
+                CharacterDetailsCard(
+                    character!!,
+                    characterDataPoints,
+                    state.episodes,
+                    onEpisodeClicked = onEpisodeClicked
+                )
             }
         }
     }
@@ -105,7 +113,8 @@ fun CharacterDetailsScreen(
 fun CharacterDetailsCard(
     character: Character,
     characterDataPoints: List<DataPoint>,
-    characterEpisodes: List<Episode>
+    characterEpisodes: List<Episode>,
+    onEpisodeClicked: (Int) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -125,7 +134,7 @@ fun CharacterDetailsCard(
         item { Spacer(Modifier.height(12.dp)) }
         item { CharacterImage(character.imageUrl) }
         item { Spacer(Modifier.height(12.dp)) }
-        item { CharacterEpisodes(characterEpisodes) }
+        item { CharacterEpisodes(characterEpisodes, onEpisodeClicked) }
         item { Spacer(Modifier.height(12.dp)) }
         items(characterDataPoints) {
             SmallMagentaText(it.title)
@@ -137,7 +146,7 @@ fun CharacterDetailsCard(
 }
 
 @Composable
-fun CharacterEpisodes(episodes: List<Episode>) {
+fun CharacterEpisodes(episodes: List<Episode>, onEpisodeClicked: (Int) -> Unit) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -145,7 +154,9 @@ fun CharacterEpisodes(episodes: List<Episode>) {
     ) {
         items(episodes) {
             Spacer(Modifier.width(8.dp))
-            Card(shape = RoundedCornerShape(12.dp), modifier = Modifier.size(150.dp)) {
+            Card(
+                shape = RoundedCornerShape(12.dp), modifier = Modifier.size(150.dp),
+                onClick = { onEpisodeClicked(it.id) }) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -194,9 +205,9 @@ private fun CharacterScreenPreview() {
     val character = Character(
         id = 1,
         name = "Rick Sanchez",
-        status =CharacterStatus.Alive,
+        status = CharacterStatus.Alive,
         created = "2017-11-04T18:48:46.250Z",
-        gender =CharacterGender.Male,
+        gender = CharacterGender.Male,
         imageUrl = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
         location = Character.Location(
             name = "Citadel of Ricks",
@@ -226,5 +237,5 @@ private fun CharacterScreenPreview() {
         state = CharacterResultUiState.Success(
             characters = character
         )
-    )
+    ){}
 }

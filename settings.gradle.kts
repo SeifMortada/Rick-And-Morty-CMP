@@ -35,6 +35,7 @@ plugins {
 include(":composeApp")
 include(":feature:characters")
 include(":feature:characterDetails")
+include(":feature:episodeDetails")
 include(":core:database")
 include(":core:network")
 include(":core:domain")

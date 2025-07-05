@@ -17,4 +17,8 @@ class RemoteCharactersRepository(private val apiService: ApiService) :
     override suspend fun getCharacterEpisodes(episodesUrl: List<String>): ApiOperation<List<Episode>> {
         return apiService.getCharacterEpisodes(episodesUrl)
     }
+
+    override suspend fun getEpisodeDetails(episodeUrl: String): ApiOperation<Episode> {
+        return apiService.getEpisode(episodeUrl.toInt())
+    }
 }

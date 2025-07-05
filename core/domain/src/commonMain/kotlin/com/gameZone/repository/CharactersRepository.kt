@@ -8,4 +8,5 @@ interface CharactersRepository {
     suspend fun getCharacters(): ApiOperation<List<Character>>
     suspend fun getCharacter(id: Int): ApiOperation<Character>
     suspend fun getCharacterEpisodes(episodesUrl: List<String>): ApiOperation<List<Episode>>
+    suspend fun getEpisodeDetails(episodeUrl: String): ApiOperation<Episode>
 }

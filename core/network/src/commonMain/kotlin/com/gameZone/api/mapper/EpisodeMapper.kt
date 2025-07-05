@@ -7,6 +7,7 @@ fun RemoteEpisode.toDomainEpisode(): Episode {
     return Episode(
         id = id,
         name = name,
-        episode = episodeCode
+        episode = episodeCode,
+        characters = characterUrls
     )
 }

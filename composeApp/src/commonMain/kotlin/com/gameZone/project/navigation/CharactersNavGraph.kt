@@ -9,13 +9,18 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import characterDetails.CharacterDetailsRoute
 import com.gameZone.characters.ui.CharactersRoute
+import com.gameZone.episodeDetails.ui.EpisodeDetailsScreen
 
 object CharactersNavGraph : BaseNavGraph {
+    
     sealed class Dest(val route: String) {
         data object Characters : Dest("/characters")
         data object Route : Dest("/characters-route")
         data object CharacterDetails : Dest("/character_details/{id}") {
             fun getRoute(id: Int) = "/character_details/${id}"
+        }
+        data object EpisodeDetails : Dest("/episode_details/{id}") {
+            fun getRoute(id: Int) = "/episode_details/${id}"
         }
     }
 
@@ -38,7 +43,16 @@ object CharactersNavGraph : BaseNavGraph {
                 arguments = listOf(navArgument("id") { type = NavType.IntType })
             ) { backStackEntry ->
                 val characterId = backStackEntry.arguments?.getInt("id") ?: -1
-                CharacterDetailsRoute(characterId = characterId)
+                CharacterDetailsRoute(characterId = characterId){ episodeId ->
+                    navHostController.navigate(Dest.EpisodeDetails.getRoute(id = episodeId))
+                }
+            }
+            composable(
+                route = Dest.EpisodeDetails.route,
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) {
+                val episodeId = it.arguments?.getInt("id") ?: -1
+                EpisodeDetailsScreen(episodeId = episodeId)
             }
         }
 

@@ -45,6 +45,13 @@ class ApiService (private val httpClient: HttpClient){
             }
         }
     }
+    suspend fun getEpisode(id: Int): ApiOperation<Episode> {
+        return safeApiCall {
+            httpClient.get("api/episode/$id")
+                .body<RemoteEpisode>()
+                .toDomainEpisode()
+        }
+    }
 }
 private inline fun <T> safeApiCall(apiCall: () -> T): ApiOperation<T> {
     return try {

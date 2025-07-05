@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
@@ -17,7 +17,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -28,12 +28,12 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -48,19 +48,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
-            //navigation
-            implementation(libs.navigation.compose)
-
-            //koin
-            implementation(libs.koin.core)
-
-            //Modules
-            implementation(projects.core.network)
-            implementation(projects.core.database)
+            // Modules
             implementation(projects.core.domain)
-            implementation(projects.feature.characters)
-            implementation(projects.feature.characterDetails)
-            implementation(projects.feature.episodeDetails)
+
+            implementation(libs.koin.compose.viewmodel)
+
+            implementation(libs.coil)
+            implementation(libs.coil.ktor)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -73,15 +68,12 @@ kotlin {
 }
 
 android {
-    namespace = "org.gameZone.project"
+    namespace = "org.example.project.feature.episodeDetails"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.example.project"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
     }
     packaging {
         resources {
@@ -105,11 +97,10 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "org.example.project.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.project"
+            packageName = "org.example.project.feature.episodeDetails"
             packageVersion = "1.0.0"
         }
     }
